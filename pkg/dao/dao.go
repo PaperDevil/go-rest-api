@@ -1,15 +1,14 @@
 package dao
 
-type Authorization interface {
+import "github.com/jmoiron/sqlx"
 
+type Authorization interface {
 }
 
 type TodoList interface {
-
 }
 
 type TodoItem interface {
-
 }
 
 type Dao struct {
@@ -18,6 +17,6 @@ type Dao struct {
 	TodoItem
 }
 
-func NewDao() *Dao {
+func NewDao(db *sqlx.DB) *Dao {
 	return &Dao{}
 }
