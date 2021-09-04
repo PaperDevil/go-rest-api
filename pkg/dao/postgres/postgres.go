@@ -1,8 +1,16 @@
-package dao
+package postgres
 
 import (
 	"fmt"
 	"github.com/jmoiron/sqlx"
+)
+
+const (
+	usersTable     = "users"
+	todoListsTable = "todo_lists"
+	usersListTable = "users_lists"
+	todoItemsTable = "todo_items"
+	itemsListTable = "items_lists"
 )
 
 type Config struct {

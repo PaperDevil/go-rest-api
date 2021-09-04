@@ -1,8 +1,13 @@
 package dao
 
-import "github.com/jmoiron/sqlx"
+import (
+	"GoRestAPI/pkg/dao/postgres"
+	"GoRestAPI/pkg/model"
+	"github.com/jmoiron/sqlx"
+)
 
 type Authorization interface {
+	CreateUser(user model.User) (int, error)
 }
 
 type TodoList interface {
@@ -18,5 +23,7 @@ type Dao struct {
 }
 
 func NewDao(db *sqlx.DB) *Dao {
-	return &Dao{}
+	return &Dao{
+		Authorization: postgres.NewAuthPostgres(db),
+	}
 }

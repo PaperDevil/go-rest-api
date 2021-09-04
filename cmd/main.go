@@ -3,19 +3,21 @@ package main
 import (
 	todo "GoRestAPI"
 	"GoRestAPI/pkg/dao"
+	"GoRestAPI/pkg/dao/postgres"
 	"GoRestAPI/pkg/service"
 	"GoRestAPI/pkg/view"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"log"
 )
 
 func main() {
+	logrus.SetFormatter(new(logrus.JSONFormatter))
 	if err := initConfig(); err != nil {
-		log.Fatalf("Error occured reading config file: %s", err.Error())
+		logrus.Fatalf("Error occured reading config file: %s", err.Error())
 	}
 
-	db, err := dao.NewPostgresDB(dao.Config{
+	db, err := postgres.NewPostgresDB(postgres.Config{
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
 		Username: viper.GetString("db.username"),
@@ -24,7 +26,7 @@ func main() {
 		SSLMode:  viper.GetString("db.sslmode"),
 	})
 	if err != nil {
-		log.Fatalf("Error occured connection to database: %s", err.Error())
+		logrus.Fatalf("Error occured connection to database: %s", err.Error())
 	}
 
 	daos := dao.NewDao(db)
@@ -33,7 +35,7 @@ func main() {
 
 	srv := new(todo.Server)
 	if err := srv.Run(viper.GetString("port"), handler.InitRoutes()); err != nil {
-		log.Fatalf("error: %s", err.Error())
+		logrus.Fatalf("error: %s", err.Error())
 	}
 }
 
